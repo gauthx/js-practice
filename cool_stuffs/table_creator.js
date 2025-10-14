@@ -1,23 +1,43 @@
 function createColumns() {
-  const noOfCols = parseInt(prompt("Enter no. of columns in the: "), 10);
+  let isColNoConfirmed = false;
+  let noOfCols;
+  while (!isColNoConfirmed) {
+    noOfCols = parseInt(prompt("Enter no. of columns required for your table: "), 10);
+    isColNoConfirmed = confirm(`Are you sure you need only ${noOfCols} columns`);
+  }
 
   const columnNames = [];
   for (let colCount = 1; colCount <= noOfCols; colCount++) {
-    const colName = prompt(`Enter name of column${colCount}`);
+    const colName = prompt(`Enter name of column${colCount}:`);
     columnNames.push(colName);
   }
   return columnNames;
 }
 
-function editRow(row) {
-  const rowNo = prompt("Which row no to edit")
-  const colNo = prompt("Which column to edit");
+function isInvalidCell(col, row, colRange, rowRange, data) {
+  const isUndefined = data === undefined;
+  const isInvalidColRange = col < 0 || col > colRange;
+  const isInvalidRowRange = row < 0 || row > rowRange;
 
-  const data = prompt("Enter new data");
+  return isUndefined || isInvalidColRange || isInvalidRowRange;
+}
 
-  row[rowNo][colNo] = data;
+function editRow(rows, cols) {
+  let isInvalidInput = true;
 
-  return row;
+  let rowNo, colNo, data;
+
+  while (isInvalidInput) {
+    rowNo = parseInt(prompt(`Enter row no to edit(0-${rows.length - 1}):`), 10);
+    colNo = parseInt(prompt(`Enter column to edit:(0-${cols.length - 1}):`), 10);
+    data = prompt("Enter new data");
+
+    isInvalidInput = isInvalidCell(colNo, rowNo, cols.length, rows.length, data);
+  }
+
+  rows[rowNo][colNo] = data;
+
+  return rows;
 
 }
 
@@ -44,7 +64,7 @@ function padData(data, length) {
   return padded;
 }
 
-function longestDataInCol(rows, colNo) {
+function longestLenInCol(rows, colNo) {
   let longest = 0;
   for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
     const currentCelldataLength = (rows[rowIndex][colNo]).length;
@@ -57,16 +77,6 @@ function longestDataInCol(rows, colNo) {
   return longest;
 }
 
-function longestDatainEachCol(rows, cols) {
-  const longestDatArr = [];
-  for (let colCount = 0; colCount < cols.length; colCount++) {
-    const longest = longestDataInCol(rows, colCount);
-    longestDatArr.push(longest);
-  }
-
-  return isColHeaderLongest(cols, longestDatArr);
-}
-
 function isColHeaderLongest(cols, longest) {
   const longestDatArr = []
   for (let colCount = 0; colCount < cols.length; colCount++) {
@@ -75,6 +85,18 @@ function isColHeaderLongest(cols, longest) {
   }
   return longestDatArr;
 }
+
+function longestLeninEachCol(rows, cols) {
+  const longestDatArr = [];
+  for (let colCount = 0; colCount < cols.length; colCount++) {
+    const longest = longestLenInCol(rows, colCount);
+    longestDatArr.push(longest);
+  }
+
+  return isColHeaderLongest(cols, longestDatArr);
+}
+
+
 
 function sumOfElements(array) {
   let sum = 0;
@@ -94,10 +116,12 @@ function printColumns(cols, longest) {
   }
   console.log(colHeaders);
 }
+
 function viewTable(cols, rows) {
-  const longest = longestDatainEachCol(rows, cols);
+  const longest = longestLeninEachCol(rows, cols);
   const dashes = "-".repeat(sumOfElements(longest) + cols.length)
-  console.log(dashes);
+
+  console.log("\n");
 
   printColumns(cols, longest);
   headerSeperator(longest);
@@ -111,11 +135,9 @@ function viewTable(cols, rows) {
       const currentCol = currentRow[colCount];
       rowData += firstDash + padData(currentCol, longest[colCount]) + "|";
     }
-
     console.log(rowData);
   }
-  console.log(dashes);
-
+    console.log("\n");
 
 }
 
@@ -123,27 +145,21 @@ function selectOption() {
   console.log(`${"–".repeat(18)}\n1. Add a new row
 2. Modify existing row
 3. View table
-4. Exit`)
+4. Exit\n`)
   const selectedOption = parseInt(prompt("Enter your option : "), 10);
   return selectedOption;
 }
 
-function createRows(rows, noOfCols) {
+function createRows(rows, colHeaders) {
   const rowData = [];
+  const noOfCols = colHeaders.length;
 
   for (let colCount = 0; colCount < noOfCols; colCount++) {
-    const cellData = prompt("Enter data for row");
+    const cellData = prompt(`Enter data for ${colHeaders[colCount]}:`);
     rowData.push(cellData);
   }
   rows.push(rowData);
   return rows;
-}
-
-function isInvalidNumber(number) {
-  const isNaN = number + "" === "NaN";
-  const isInvalid = typeof number !== "number" || isNaN;
-
-  return isInvalid;
 }
 
 function columnSize(array) {
@@ -159,21 +175,20 @@ function displayDescription() {
 }
 
 function main() {
-
   displayDescription();
-
   let rows = [];
-
+  // let rows = [["1","apple"],["2","banana"]];
+  // let columnHeaders=["no","item"]
   let columnHeaders = createColumns();
 
   while (true) {
     const selectedOption = selectOption();
     switch (selectedOption) {
       case 1:
-        rows = createRows(rows, columnHeaders.length);
+        rows = createRows(rows, columnHeaders);
         break;
       case 2:
-        rows = editRow(rows);
+        rows = editRow(rows, columnHeaders);
         break;
       case 3:
         viewTable(columnHeaders, rows);
