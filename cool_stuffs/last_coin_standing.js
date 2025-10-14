@@ -22,8 +22,12 @@ function red(text) {
   return format(31, text)
 }
 
-function isGameOver(total) {
-  return total === 1;
+function is1CoinLeft(total, playerName) {
+  if (total === 1) {
+    console.log(`${playerName} lost 😂`);
+    return true;
+  }
+  return false;
 }
 
 function displayCoins(totalCoins) {
@@ -72,20 +76,16 @@ function playGame() {
   const player1 = prompt("Enter player1's name: ");
   const player2 = prompt("Enter player2's name: ");
 
-  while (true) {
+  let isGameOver = false;
+
+  while (!isGameOver) {
     displayCoins(totalCoins);
     totalCoins = takeCoins(totalCoins, player1, 1);
-    if (isGameOver(totalCoins)) {
-      console.log(`${player2} lost 😂`);
-      return;
-    }
+    isGameOver = is1CoinLeft(totalCoins, player2);
 
     displayCoins(totalCoins);
     totalCoins = takeCoins(totalCoins, player2, 2);
-    if (isGameOver(totalCoins)) {
-      console.log(`${player1} lost 😂`);
-      return;
-    }
+    isGameOver = is1CoinLeft(totalCoins, player1);
   }
 }
 
