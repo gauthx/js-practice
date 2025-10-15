@@ -62,7 +62,9 @@ function displayGameDescription() {
   const redText = red("not");
 
   console.log(`Welcome to the Last Coin Standing Game!🪙
-Your objective is ${redText} to take the last coin
+This is a two player game.
+Your objective is ${redText} to take the last coin.
+There will be a pile of coins. On each player's turn you can pick a handful of coins and it will get subtracted from the pile.
 Game rule:
 1.You can't take more than 3 or less than 1 coins in a turn`);
   underline(40);
@@ -86,7 +88,7 @@ function playGame() {
     if(isGameOver) {
       break;
     }
-    
+
     displayCoins(totalCoins);
     totalCoins = takeCoins(totalCoins, player2, 2);
     isGameOver = is1CoinLeft(totalCoins, player1);
