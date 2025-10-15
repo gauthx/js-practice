@@ -83,6 +83,10 @@ function playGame() {
     totalCoins = takeCoins(totalCoins, player1, 1);
     isGameOver = is1CoinLeft(totalCoins, player2);
 
+    if(isGameOver) {
+      break;
+    }
+    
     displayCoins(totalCoins);
     totalCoins = takeCoins(totalCoins, player2, 2);
     isGameOver = is1CoinLeft(totalCoins, player1);
