@@ -1,4 +1,4 @@
-But now that I am back(albeit for two days), here is a nice assignment for you all to work on.
+
 
 ## 🚀 Assignment: The Bencode Cipher - Securing the Future of Data!
 
