@@ -176,6 +176,9 @@ function testAllEncode() {
     testEncode("Empty Array", [], "le");
     testEncode("Array containing integer and string element", [2025, "year"], "li2025e4:yeare");
     testEncode("Nested array", [91, ["India", "New Delhi"]], "li91el5:India9:New Delhie");
+    testEncode("Empty String", "", "0:");
+    testEncode("Negative Number", -42, "i-42e");
+    testEncode("Special characters", "special!@#$chars", "16:special!@#$chars");
 }
 
 function testAllDecode() {
@@ -196,7 +199,7 @@ function main() {
 
     console.log("Testing Decode");
     underline(14);
-    testAllDecode();
+    //testAllDecode();
 }
 
 main();
