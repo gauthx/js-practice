@@ -1,3 +1,4 @@
+const INT_PREFIX = "i";
 function isInteger(data) {
     return typeof data === "number";
 }
@@ -6,12 +7,27 @@ function isString(data) {
     return typeof data === "string";
 }
 
-function bencodeInteger(integer) {
+function encodeInteger(integer) {
     return `i${integer}e`;
 }
 
-function bencodeString(string) {
+function encodeString(string) {
     return `${string.length}:${string}`;
+}
+
+function encode(data) {
+    if (Array.isArray(data)) {
+        return encodeArray(data, 0);
+    }
+
+    if (isInteger(data)) {
+        return encodeInteger(data);
+    }
+
+    if (isString(data)) {
+        return encodeString(data);
+    }
+
 }
 
 function encodeArray(array, index, bencodedString = "l") {
@@ -22,34 +38,12 @@ function encodeArray(array, index, bencodedString = "l") {
     const element = array[index];
 
     if (Array.isArray(element)) {
-        const bencode = "l";
-        return encodeArray(element, 0, bencodedString + bencode);
-    }
-
-    if (isInteger(element)) {
-        const bencode = bencodeInteger(element);
+        const bencode = encodeArray(element, 0);
         return encodeArray(array, index + 1, bencodedString + bencode);
     }
 
-    if (isString(element)) {
-        const bencode = bencodeString(element);
-        return encodeArray(array, index + 1, bencodedString + bencode);
-    }
-
-}
-
-function encode(data) {
-    if (Array.isArray(data)) {
-        return encodeArray(data, 0);
-    }
-
-    if (isInteger(data)) {
-        return bencodeInteger(data);
-    }
-
-    if (isString(data)) {
-        return bencodeString(data);
-    }
+    const bencode = encode(element);
+    return encodeArray(array, index + 1, bencodedString + bencode);
 
 }
 
@@ -96,16 +90,25 @@ function isBencodedInt(bencodedString, index = 0) {
     return bencodedString[index] === "i";
 }
 
-function isBenCodedStringData(bencodedString, index = 0) {
-    const numbers = ["0","1","2","3","4","5","6","7","8","9"];
-    return  numbers.includes(bencodedString[index]);
+function isBenCodedString(bencodedString, index = 0) {
+    const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+    return numbers.includes(bencodedString[index]);
 }
+
 function decodeString(bencodedString, index = 0) {
     const lengthSeparatorIndex = bencodedString.indexOf(":", index);
     const stringLength = parseInt(bencodedString.slice(index, lengthSeparatorIndex));
     const stringEndIndex = lengthSeparatorIndex + stringLength;
 
-    return bencodedString.slice(lengthSeparatorIndex + 1, stringEndIndex + 1);
+    const string = bencodedString.slice(lengthSeparatorIndex + 1, stringEndIndex + 1);
+
+    return [string, stringEndIndex];
+
+}
+
+function isEndOfArray(char) {
+    return char === "e";
 }
 
 function isBencodedArray(bencodedString, index = 0) {
@@ -113,53 +116,67 @@ function isBencodedArray(bencodedString, index = 0) {
 }
 
 function decodeInt(bencodedString, index = 0) {
+    const integerInfo = [];
+
     const integerEndIndex = bencodedString.indexOf("e", index);
-    return parseInt(bencodedString.slice(index + 1, integerEndIndex));
+    const integer = parseInt(bencodedString.slice(index + 1, integerEndIndex));
+
+    integerInfo.push(integer);
+    integerInfo.push(integerEndIndex);
+
+    return integerInfo;
 }
 
-function decodeArray(bencodedString) {
-    const array = [];
-    let nextElementIndex;
-    let index = 1;
+function decodeElement(bencodedString, cursor) {
+    if (isBenCodedString(bencodedString[cursor])) {
+        return decodeString(bencodedString, cursor);
+    }
 
-    while(index < bencodedString.length) {
+    if (isBencodedInt(bencodedString[cursor])) {
+        return decodeInt(bencodedString, cursor);
+    }
+}
 
-        if (isBencodedInt(bencodedString, index)) {
-            const number = decodeInt(bencodedString, index);
-            array.push(number);
 
-            nextElementIndex = bencodedString.indexOf("e", index) + 1;
-            index = nextElementIndex;
-        }
-           
-        if(isBenCodedStringData(bencodedString, index)) {
-            const string = decodeString(bencodedString,index);
-            array.push(string);        
-        }
+function decodeArray(bencodedString, cursor, array) {
+    if (isEndOfArray(bencodedString[cursor])) {
+        return [array, cursor];
 
     }
 
-    return array;
+    if (isBencodedArray(bencodedString[cursor])) {
+        const subarray = decodeArray(bencodedString, cursor + 1, []);
+
+        array.push(subarray[0]);
+        cursor = subarray[1] + 1;
+
+        return decodeArray(bencodedString, cursor, array);
+    }
+
+    const elementInfo = decodeElement(bencodedString, cursor);
+    const element = elementInfo[0];
+    array.push(element);
+
+    cursor = elementInfo[1] + 1;
+
+    return decodeArray(bencodedString, cursor, array);
+}
+
+function decodeArrayWrapper(bencodedString, cursor, array) {
+    return decodeArray(bencodedString, cursor, array)[0];
 }
 
 function decode(bencodedString) {
-    if (isBencodedInt(bencodedString)) {
-        return decodeInt(bencodedString);
-    }
-
     if (isBencodedArray(bencodedString)) {
-        return decodeArray(bencodedString);
+        return decodeArrayWrapper(bencodedString, 1, []);
     }
 
-    if(isBenCodedStringData(bencodedString)) {
-        return decodeString(bencodedString);
-    }
-    
+    return decodeElement(bencodedString, 0)[0];
 }
 
 function testDecode(message, bencodedString, expectedValue) {
     const actualValue = decode(bencodedString);
-    const isPass = areDeepEqual(actualValue,expectedValue);
+    const isPass = areDeepEqual(actualValue, expectedValue);
     let emojiMessage = isPass ? "✅" : "❌";
     emojiMessage += message;
 
@@ -175,7 +192,7 @@ function testAllEncode() {
     testEncode("Simple string", "hello", "5:hello");
     testEncode("Empty Array", [], "le");
     testEncode("Array containing integer and string element", [2025, "year"], "li2025e4:yeare");
-    testEncode("Nested array", [91, ["India", "New Delhi"]], "li91el5:India9:New Delhie");
+    testEncode("Nested array", [91, ["India", "New Delhi"]], "li91el5:India9:New Delhiee");
     testEncode("Empty String", "", "0:");
     testEncode("Negative Number", -42, "i-42e");
     testEncode("Special characters", "special!@#$chars", "16:special!@#$chars");
@@ -184,12 +201,17 @@ function testAllEncode() {
 function testAllDecode() {
     testDecode("Integer 1024", "i1024e", 1024);
     testDecode("Simple string", "5:hello", "hello");
-    testDecode(" Array containing Integer only", "li23ei12ee", [23, 12]);
+    testDecode("Empty string", "0:", "");
+    testDecode("Array containing Integer only", "li23ei12ee", [23, 12]);
+    testDecode("Array containing String only", "l2:hi3:whye", ["hi", "why"]);
     testDecode("Array containing integer and string element", "li2025e4:yeare", [2025, "year"]);
+    testDecode("Nested array", "li91el5:India9:New Delhiee", [91, ["India", "New Delhi"]]);
+    testDecode("Empty Nested arrays", "llee", [[]]);
+
 }
 
 function underline(count) {
-    "-".repeat(count);
+    console.log("-".repeat(count));
 }
 
 function main() {
@@ -199,7 +221,7 @@ function main() {
 
     console.log("Testing Decode");
     underline(14);
-    //testAllDecode();
+    testAllDecode();
 }
 
 main();
