@@ -16,10 +16,10 @@ function sort(data) {
 function medianOf(data) {
   const sorted = sort(data);
   const middleIndex = (sorted.length - 1) / 2;
-  const ceiled = Math.ceil(middleIndex);
-  const floored = Math.floor(middleIndex);
+  const ceiledIndex = Math.ceil(middleIndex);
+  const flooredIndex = Math.floor(middleIndex);
 
-  return (sorted[ceiled] + sorted[floored]) / 2;
+  return (sorted[ceiledIndex] + sorted[flooredIndex]) / 2;
 }
 
 function testMedian(message, data, expectedValue) {
