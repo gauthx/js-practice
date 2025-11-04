@@ -1,4 +1,3 @@
-const INT_PREFIX = "i";
 function isInteger(data) {
     return typeof data === "number";
 }
@@ -17,7 +16,7 @@ function encodeString(string) {
 
 function encode(data) {
     if (Array.isArray(data)) {
-        return encodeArray(data, 0);
+        return encodeList(data, 0);
     }
 
     if (isInteger(data)) {
@@ -30,21 +29,20 @@ function encode(data) {
 
 }
 
-function encodeArray(array, index, bencodedString = "l") {
-    if (index === array.length) {
+function encodeList(list, index, bencodedString = "l") {
+    if (index === list.length) {
         return bencodedString + "e";
     }
 
-    const element = array[index];
+    const element = list[index];
 
     if (Array.isArray(element)) {
-        const bencode = encodeArray(element, 0);
-        return encodeArray(array, index + 1, bencodedString + bencode);
+        const bencode = encodeList(element, 0);
+        return encodeList(list, index + 1, bencodedString + bencode);
     }
 
     const bencode = encode(element);
-    return encodeArray(array, index + 1, bencodedString + bencode);
-
+    return encodeList(list, index + 1, bencodedString + bencode);
 }
 
 function testEncode(message, data, expectedValue) {
@@ -138,28 +136,27 @@ function decodeElement(bencodedString, cursor) {
 }
 
 
-function decodeArray(bencodedString, cursor, array) {
+function decodeArray(bencodedString, cursor, decoded) {
     if (isEndOfArray(bencodedString[cursor])) {
-        return [array, cursor];
-
+        return [decoded, cursor];
     }
 
     if (isBencodedArray(bencodedString[cursor])) {
         const subarray = decodeArray(bencodedString, cursor + 1, []);
 
-        array.push(subarray[0]);
+        decoded.push(subarray[0]);
         cursor = subarray[1] + 1;
 
-        return decodeArray(bencodedString, cursor, array);
+        return decodeArray(bencodedString, cursor, decoded);
     }
 
     const elementInfo = decodeElement(bencodedString, cursor);
     const element = elementInfo[0];
-    array.push(element);
+    decoded.push(element);
 
     cursor = elementInfo[1] + 1;
 
-    return decodeArray(bencodedString, cursor, array);
+    return decodeArray(bencodedString, cursor, decoded);
 }
 
 function decodeArrayWrapper(bencodedString, cursor, array) {
