@@ -38,24 +38,26 @@ function test(message, array, expectedValue, actualValue) {
 
 const countBlue = (count, color) => color === "blue" ? count + 1 : count;
 
-const sum = (sum, number) => sum + number;
-
-const uniqueElements = (initial, element) => {
-  console.log(`element : ${element} array : ${typeof initial} `);
-  const result =  initial.includes(element) ? unique : initial.push(element);
-  console.log(`Result : ${result}`);
-  console.log(unique, );
-  
-
-  return result;
+const countOf = (element, array) => {
+  return array.reduce((count, value) => value === element ? count + 1 : count, 0);
 }
 
-const unique = (value,index,array) => array.indexOf(value) === index;
+const sum = (sum, number) => sum + number;
+
+const uniqueUsingReduce = (unique, element) => {
+  if (!unique.includes(element))
+    unique.push(element)
+
+
+  return unique;
+}
+
+const unique = (value, index, array) => array.indexOf(value) === index;
 
 
 function testAll() {
   const ribbons = ["red", "blue", "red", "green", "red", "blue"];
-  test("how many blue ribbons", ribbons, 2, ribbons.reduce(countBlue, 0));
+  test("how many blue ribbons", ribbons, 2, countOf("blue", ribbons));
 
   const constellations = [["Orion", "Leo"], ["Taurus"], ["Orion", "Gemini"]];
   const combinedConstellations = ["Orion", "Leo", "Taurus", "Orion", "Gemini"];
@@ -72,13 +74,13 @@ function testAll() {
   test("any group sang do ?", choirSequences, true, choirSequences.flat().some((sequence) => sequence === "do"));
 
   const temperatureSheets = [[22, 23], [25, 24, 22], [29]];
-  test("Checking if every temperature is below 32",temperatureSheets,true,temperatureSheets.flat().every((temperature) => temperature < 32));
+  test("Checking if every temperature is below 32", temperatureSheets, true, temperatureSheets.flat().every((temperature) => temperature < 32));
 
-  const runnerLogs =[[2, 3, 2],[4],[1, 1]];
-  test("Total Miles run",runnerLogs,13,runnerLogs.flat().reduce(sum,0));
+  const runnerLogs = [[2, 3, 2], [4], [1, 1]];
+  test("Total Miles run", runnerLogs, 13, runnerLogs.flat().reduce(sum, 0));
 
-  const paintColors = [["blue", "yellow"],["yellow", "green"],["blue"]];
-  test("Unique Colors",paintColors,["blue","yellow","green"],paintColors.flat().filter(unique));
+  const paintColors = [["blue", "yellow"], ["yellow", "green"], ["blue"]];
+  test("Unique Colors", paintColors, ["blue", "yellow", "green"], paintColors.flat().reduce(uniqueUsingReduce,[]));
 }
 
 testAll();
