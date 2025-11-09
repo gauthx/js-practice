@@ -55,6 +55,9 @@ const unique = (array) => {
 };
 
 
+const isA = (char) => char === "a" || char === "A";
+
+
 function testAll() {
   const ribbons = ["red", "blue", "red", "green", "red", "blue"];
   test("how many blue ribbons", ribbons, 2, countOf("blue", ribbons));
@@ -97,10 +100,16 @@ function testAll() {
   test("Summarize how many times each color appears in a creative art project",
     paintColors, true, uniqueColors.map((color) => {
       // console.log(color);
-      return [color, countOf(color,paintColors.flat())]
+      return [color, countOf(color, paintColors.flat())]
     }));
 
-
+  const sentences = ['just a phrase', 'also another phrase', 'arbitrary phrase', 'An interesting phrase'];
+  test("All words starting with 'a' in a sentence",sentences,[ "a", "also", "another", "arbitrary", "An" ],
+    sentences.flatMap((sentence) => {
+      const words = sentence.split(" ");
+      return words.filter((word) => isA(word[0]) );
+    })
+  )
 
 }
 
