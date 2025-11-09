@@ -36,8 +36,6 @@ function test(message, array, expectedValue, actualValue) {
   console.log(expectedMessage, actualMessage);
 }
 
-const countBlue = (count, color) => color === "blue" ? count + 1 : count;
-
 const countOf = (element, array) => {
   return array.reduce((count, value) => value === element ? count + 1 : count, 0);
 }
@@ -52,7 +50,9 @@ const uniqueUsingReduce = (unique, element) => {
   return unique;
 }
 
-const unique = (value, index, array) => array.indexOf(value) === index;
+const unique = (array) => {
+  return array.filter((value, index) => array.indexOf(value) === index)
+};
 
 
 function testAll() {
@@ -65,7 +65,7 @@ function testAll() {
 
   const birds = ["sparrow", "crow", "sparrow", "eagle", "crow"];
   const uniqueBirds = ["sparrow", "crow", "eagle"];
-  test("list of birds without repeating", birds, uniqueBirds, birds.filter(unique));
+  test("list of birds without repeating", birds, uniqueBirds, unique(birds));
 
   const candyLogs = [[5, 3], [2], [4, 1]];
   test("total number of candies", candyLogs, 15, candyLogs.flat().reduce(sum, 0));
@@ -80,7 +80,28 @@ function testAll() {
   test("Total Miles run", runnerLogs, 13, runnerLogs.flat().reduce(sum, 0));
 
   const paintColors = [["blue", "yellow"], ["yellow", "green"], ["blue"]];
-  test("Unique Colors", paintColors, ["blue", "yellow", "green"], paintColors.flat().reduce(uniqueUsingReduce,[]));
+  test("Unique Colors", paintColors, ["blue", "yellow", "green"], unique(paintColors.flat()));
+
+  const booksReturned = ["Dune", "Dune", "Foundation", "Dune"];
+  test("Count of how many times Dune returned", booksReturned, 3, countOf("Dune", booksReturned));
+
+  const measurements = [[3, 4], [5, 2], [1]];
+  test("Are all measurements positive", measurements, true, measurements.flatMap((value) => value).every((element) => element > 0));
+
+  const words = [["How", "are", "you"]["I", "am", "fine"], ["hey", "there"]];
+  // test("combine  all words written on 3 worksheets");
+
+
+  const uniqueColors = unique(paintColors.flat());
+  console.log(uniqueColors);
+  test("Summarize how many times each color appears in a creative art project",
+    paintColors, true, uniqueColors.map((color) => {
+      // console.log(color);
+      return [color, countOf(color,paintColors.flat())]
+    }));
+
+
+
 }
 
 testAll();
