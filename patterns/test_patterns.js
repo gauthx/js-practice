@@ -155,9 +155,12 @@ function testTriangle() {
 }
 
 function testDiamond() {
-  let message = "5 rows 💎";
-  let expectedPattern = "  *  \n *** \n******\n *** \n  *  ";
-  testPattern(message, DIAMOND, 5, expectedPattern);
+  const testCases = [{
+    desc: "5 rows 💎",
+    fn: generatePattern,
+    args: [styles.DIAMOND, 5],
+    expected: "  *  \n *** \n******\n *** \n  *  ",
+  }];
 }
 
 function testAll() {
