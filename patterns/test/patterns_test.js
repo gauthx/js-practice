@@ -1,22 +1,31 @@
-import { generatePattern, styles } from "./patterns.js";
+import { generatePattern, styles } from "../src/patterns.js";
+import { assertEquals } from "@std/assert";
 
-function testPattern(message, fn, args, expectedValue) {
-  const actualValue = fn(...args);
-  const isPass = actualValue === expectedValue;
-  let emojiMessage = isPass ? "✅" : "❌";
-  emojiMessage += message;
-  const inputMessage = isPass ? "" : `\n  Inputs\t:[${args}]`;
-  const expectedMessage = isPass ? "" : `  Expected\t: ${expectedValue}`;
-  const actualMessage = isPass ? "" : `\n  Actual\t: ${actualValue}`;
-  console.log(emojiMessage, inputMessage);
-  console.log(expectedMessage, actualMessage);
-}
-
-const testFn = (testCases) => {
+const testFn = function (testCases) {
   testCases.forEach((testCase) =>
-    testPattern(testCase.desc, testCase.fn, testCase.args, testCase.expected)
+    Deno.test(testCase.desc, () => {
+      assertEquals(testCase.expected, testCase.fn(...testCase.args));
+    })
   );
 };
+
+Deno.test("2 x 4 rectangle", () => {
+  const expected = generatePattern(styles.FILLED_RECT, [2, 4]);
+  const actual = "**\n**\n**\n**";
+  assertEquals(expected, actual);
+});
+
+Deno.test("5 x 3 rectangle", () => {
+  const expected = generatePattern(styles.FILLED_RECT, [5, 3]);
+  const actual = "*****\n*****\n*****";
+  assertEquals(expected, actual);
+});
+
+Deno.test("0 x 1 rectangle", () => {
+  const expected = generatePattern(styles.FILLED_RECT, [0, 1]);
+  const actual = "";
+  assertEquals(expected, actual);
+});
 
 function testRectangle() {
   const testCases = [{
@@ -25,12 +34,12 @@ function testRectangle() {
     args: [styles.FILLED_RECT, [2, 4]],
     expected: "**\n**\n**\n**",
   }, {
-    desc: " 5 x 3 rectangle",
+    desc: "5 x 3 rectangle",
     fn: generatePattern,
     args: [styles.FILLED_RECT, [5, 3]],
     expected: "*****\n*****\n*****",
   }, {
-    desc: " 0 x 1 rectangle",
+    desc: "0 x 1 rectangle",
     fn: generatePattern,
     args: [styles.FILLED_RECT, [0, 1]],
     expected: "",
@@ -38,6 +47,24 @@ function testRectangle() {
 
   testFn(testCases);
 }
+
+Deno.test("0x3 Hrectangle", () => {
+  const expected = generatePattern(styles.HOLLOW_RECT, [0, 3]);
+  const actual = "";
+  assertEquals(expected, actual);
+});
+
+Deno.test("4x3 Hrectangle", () => {
+  const expected = generatePattern(styles.HOLLOW_RECT, [4, 3]);
+  const actual = "****\n*  *\n****";
+  assertEquals(expected, actual);
+});
+
+Deno.test("3x2 Hrectangle", () => {
+  const expected = generatePattern(styles.HOLLOW_RECT, [3, 2]);
+  const actual = "***\n***";
+  assertEquals(expected, actual);
+});
 
 function testHollowRectangle() {
   const testCases = [{
@@ -63,6 +90,12 @@ function testHollowRectangle() {
   }];
   testFn(testCases);
 }
+
+Deno.test("3 x 3 Alternating Rectangle", () => {
+  const expected = generatePattern(styles.HOLLOW_RECT, [3, 2]);
+  const actual = "***\n***";
+  assertEquals(expected, actual);
+});
 
 function testAlternatingRectangle() {
   const testCases = [{
@@ -173,4 +206,4 @@ function testAll() {
   // testDiamond();
 }
 
-testAll();
+// testAll();
