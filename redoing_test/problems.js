@@ -10,3 +10,7 @@ const customOrder = (numbers) => {
   
   return evenAscending;
 };
+
+const numbers = [1, 15, 64, 55];
+const isFloating = (number) => number % 1 !== 0;
+numbers.filter(num => !isFloating(Math.sqrt(num))).map(num => Math.sqrt(num));
