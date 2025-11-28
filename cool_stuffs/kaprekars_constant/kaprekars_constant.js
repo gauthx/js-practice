@@ -16,16 +16,20 @@ function toDigits(number) {
     return padToFourDigits(digits);
 }
 
+const formNumber = (digits) => {
+    return digits.reduce((num, digit) => num * 10 + digit, 0);
+};
+
 function formLargestNum(digits) {
     const largest = digits.toSorted((a, b) => b - a);
 
-    return parseInt(largest.join(""));
+    return formNumber(largest);
 }
 
 function formSmallestNum(digits) {
     const smallest = digits.toSorted((a, b) => a - b);
 
-    return parseInt(smallest.join(""));
+    return formNumber(smallest);
 }
 
 function hasAtleastTwoDiffDigits(digits) {
@@ -42,13 +46,13 @@ function hasAtleastTwoDiffDigits(digits) {
     return differentNumsFound >= 1;
 }
 
-const isNot4digitNum = (digits) => digits.length !== 4
-
+const isNot4digitNum = (digits) => digits.length !== 4;
 
 const isInvalidNum = (num) => {
-    const digits = toDigits(num)
-    return !hasAtleastTwoDiffDigits(digits) || isNot4digitNum(digits); 
-}
+    const digits = toDigits(num);
+    return !hasAtleastTwoDiffDigits(digits) || isNot4digitNum(digits);
+};
+
 function noOfIterationsTook(number) {
     const kaprekarConstant = 6174;
 
