@@ -18,7 +18,7 @@ const breakText = (text, length) => {
 };
 
 const generateGarbageText = (length) => {
-  const chars = ["%", "&", "^", "*", "a", "z", "k", "l"];
+  const chars = ["%", "&", "^", "*", "a", "z", "k", "l","z","{","|","#","~"];
 
   const garbage = [];
   for (let index = 0; index < length; index++) {
@@ -30,7 +30,8 @@ const generateGarbageText = (length) => {
 };
 
 const insertTextInBetween = (garbage, text) => {
-  return garbage.toSpliced(3, text.length, ...text);
+  const randomStartIndex = randomNumBetween(0, (garbage.length - text.length+1 ));
+  return garbage.toSpliced(randomStartIndex, text.length, ...text);
 };
 
 const main = () => {
@@ -38,10 +39,11 @@ const main = () => {
   const brokenSentence = breakText(sentence, 3);
   const obfuscated = [];
   for (const brokenText of brokenSentence) {
-    const garbageText = generateGarbageText(10);
+    const garbageText = generateGarbageText(20);
     const obfuscatedLine = insertTextInBetween(garbageText, brokenText);
     obfuscated.push(obfuscatedLine.join(""));
   }
   console.log(obfuscated.join("\n"));
 };
+
 main();
