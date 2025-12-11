@@ -4,7 +4,7 @@ const main = () => {
     /function (\w+)(\([a-zA-Z, ]*\))/g,
     "const $1 = $2 =>",
   );
-
+  
   Deno.writeTextFileSync("./arrow_functions.js",replaced);
 };
 

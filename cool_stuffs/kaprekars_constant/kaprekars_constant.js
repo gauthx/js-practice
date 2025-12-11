@@ -33,17 +33,8 @@ function formSmallestNum(digits) {
 }
 
 function hasAtleastTwoDiffDigits(digits) {
-    let differentNumsFound = 0;
-    for (let index = 0; index < digits.length - 1; index++) {
-        const element = digits[index];
-        const nextElement = digits[index + 1];
-
-        if (element !== nextElement) {
-            differentNumsFound++;
-        }
-    }
-
-    return differentNumsFound >= 1;
+    const [firstDigit] = digits;
+    return digits.every((digit) => digit === firstDigit);
 }
 
 const isNot4digitNum = (digits) => digits.length !== 4;
@@ -115,6 +106,11 @@ function main() {
             case 1:
                 const number = parseInt(prompt("Enter the number"));
                 noOfIterationsTook(number);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
             default:
                 console.log("Invalid option!");
         }

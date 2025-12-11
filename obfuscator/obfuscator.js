@@ -6,7 +6,7 @@ const breakText = (text, length) => {
   const brokenText = [];
   let start = 0;
   let end = length;
-  while (end <= text.length) {
+  while (end < text.length) {
     const sliceOfText = text.slice(start, end);
     const template = `{${sliceOfText},`;
     brokenText.push(template);
@@ -18,7 +18,21 @@ const breakText = (text, length) => {
 };
 
 const generateGarbageText = (length) => {
-  const chars = ["%", "&", "^", "*", "a", "z", "k", "l","z","{","|","#","~"];
+  const chars = [
+    "%",
+    "&",
+    "^",
+    "*",
+    "a",
+    "z",
+    "k",
+    "l",
+    "z",
+    "{",
+    "|",
+    "#",
+    "~",
+  ];
 
   const garbage = [];
   for (let index = 0; index < length; index++) {
@@ -30,12 +44,15 @@ const generateGarbageText = (length) => {
 };
 
 const insertTextInBetween = (garbage, text) => {
-  const randomStartIndex = randomNumBetween(0, (garbage.length - text.length+1 ));
+  const randomStartIndex = randomNumBetween(
+    0,
+    garbage.length - text.length + 1,
+  );
   return garbage.toSpliced(randomStartIndex, text.length, ...text);
 };
 
 const main = () => {
-  const sentence = "I love apples!";
+  const sentence = "I love apple!";
   const brokenSentence = breakText(sentence, 3);
   const obfuscated = [];
   for (const brokenText of brokenSentence) {
