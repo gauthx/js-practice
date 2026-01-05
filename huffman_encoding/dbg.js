@@ -10,6 +10,8 @@ class Debugger {
   pause() {
     prompt(red("paused execution"));
   }
+
+  
 }
 
 export const dbg = new Debugger();
