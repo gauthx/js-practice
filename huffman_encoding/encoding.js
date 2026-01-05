@@ -44,19 +44,35 @@ const buildHuffmanTree = (nodes) => {
   return root;
 };
 
+const generateHuffmanCodes = (tree, huffmanCodes = {}, depth = "") => {
+  if (tree.right == null) {
+    huffmanCodes[tree.char] = depth;
+    return huffmanCodes;
+  }
+  const letter = tree.left.char;
+  const code = depth + "0";
+  huffmanCodes[letter] = code;
+
+  return generateHuffmanCodes(tree.right, huffmanCodes, depth + "1");
+};
+
+const displayCompressedWord = (word, codes) => {
+  console.log("Word to compress: ", word)
+  console.table(codes);
+  const compressedBits = [];
+  for (const letter of word) {
+    compressedBits.push(codes[letter]);
+  }
+  console.log(compressedBits.join(" "));
+};
 
 const main = () => {
   const wordToCompress = "lossless";
-  const frequencies = dbg.log(
-    "Frequencies",
-    calculateFrequencies(wordToCompress),
-  );
-  const nodes = dbg.log(
-    "Created and sorted nodes",
-    sortNodes(createNodes(frequencies)),
-  );
+  const frequencies = calculateFrequencies(wordToCompress);
+  const nodes = sortNodes(createNodes(frequencies));
   const tree = buildHuffmanTree(nodes);
-  console.log(tree)
+  const codes = generateHuffmanCodes(tree);
+  displayCompressedWord(wordToCompress, codes);
 };
 
 main();
