@@ -1,6 +1,8 @@
 async function f() {
   console.log("A");
-  await Promise.resolve();
+  await new Promise((res) => {
+    res("J");
+  });
   console.log("B");
 }
 
