@@ -1,2 +1,0 @@
-grep -o "[0-9]\+,[^0-9]\+_" obfuscated.txt |sort -t"," -nk1 | grep -o "[^0-9,]\+[^_]\+" > output.txt
-grep -o "\d\+,[^_]\+" obfuscated.txt | sort -n | cut -d"," -f2- | wc  
