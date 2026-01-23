@@ -1,3 +1,5 @@
+import { format } from "@std/fmt/duration";
+
 const calculateGrossWPM = (typedChars, { startTime, endTime }) => {
   const totalKeyStrokes = typedChars.length;
   const timeTaken = endTime - startTime;
@@ -8,8 +10,7 @@ const isCorrectChar = (char1, char2) => char1 === char2;
 
 const noOfIncorrectChars = (chars, typedChars) =>
   typedChars.reduce(
-    (reduced, char, index) =>
-      reduced + (isCorrectChar(char, chars[index]) ? 0 : 1),
+    (count, char, index) => count + (isCorrectChar(char, chars[index]) ? 0 : 1),
     0,
   );
 
@@ -28,12 +29,16 @@ export const calculateStatistics = (chars, typedChars, timeStamps) => {
   const netWPM = calculateNetWPM(chars, typedChars, timeStamps);
   const grossWPM = calculateGrossWPM(typedChars, timeStamps);
   const accuracy = calculateAccuracy(grossWPM, netWPM);
+  const timeTook = format(timeStamps.endTime - timeStamps.startTime, {
+    ignoreZero: true,
+  });
 
-  return { netWPM, grossWPM, accuracy };
+  return { netWPM, grossWPM, accuracy, timeTook };
 };
 
 export const displayStatistics = (statistics) => {
   console.log(`Gross WPM: ${statistics.grossWPM}
 Net WPM: ${statistics.netWPM}
-Accuracy: ${statistics.accuracy}`);
+Accuracy: ${statistics.accuracy}
+Time took: ${statistics.timeTook}`);
 };

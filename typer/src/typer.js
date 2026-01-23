@@ -7,8 +7,13 @@ const chooseColor = (typedChar, typedCharacters, sentence) => {
   return sentence[typedCharacters.length] === typedChar ? brightYellow : red;
 };
 
-const randomSentence = () =>
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temUt enim ad";
+const randomSentence = async () => {
+  const response = await fetch(
+    "https://random-word-api.herokuapp.com/word?number=10",
+  );
+  const randomWords = JSON.parse(await response.text());
+  return randomWords.join(" ").split("");
+};
 
 const typingPreview = (chars, typedChars) => {
   return typedChars.join("") +
@@ -25,7 +30,6 @@ const readTyped = async (chars) => {
   const decoder = new TextDecoder();
   for await (const keyStroke of Deno.stdin.readable) {
     console.clear();
-    console.log({ typedL: typedChars.length, charsL: chars.length });
 
     if (isBackspace(keyStroke)) {
       coloredChars.pop();
@@ -43,12 +47,11 @@ const readTyped = async (chars) => {
     }
   }
 
-  console.log({ typedChars });
   return typedChars;
 };
 
 export const typer = async () => {
-  const charsToType = randomSentence().split("");
+  const charsToType = await randomSentence();
   const startTime = Date.now();
   const typedChars = await readTyped(charsToType);
   const endTime = Date.now();
