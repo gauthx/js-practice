@@ -3,14 +3,12 @@ import { calculateStatistics, displayStatistics } from "./statistics.js";
 
 const isBackspace = (arrayBuffer) => arrayBuffer.at(0) === 127;
 
-const isEnter = (arrayBuffer) => arrayBuffer.at(0) === 13;
-
 const chooseColor = (typedChar, typedCharacters, sentence) => {
   return sentence[typedCharacters.length] === typedChar ? brightYellow : red;
 };
 
 const randomSentence = () =>
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temUt enim ad ";
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temUt enim ad";
 
 const typingPreview = (chars, typedChars) => {
   return typedChars.join("") +
@@ -27,22 +25,25 @@ const readTyped = async (chars) => {
   const decoder = new TextDecoder();
   for await (const keyStroke of Deno.stdin.readable) {
     console.clear();
-    if (isEnter(keyStroke)) {
-      break;
-    }
+    console.log({ typedL: typedChars.length, charsL: chars.length });
 
     if (isBackspace(keyStroke)) {
       coloredChars.pop();
       typedChars.pop();
-    }
-    else {
+    } else {
       const typedChar = decoder.decode(keyStroke);
       typedChars.push(typedChar);
       const colorer = chooseColor(typedChar, coloredChars, chars);
       coloredChars.push(bold(colorer(typedChar)));
     }
     console.log(typingPreview(chars, coloredChars));
+
+    if (chars.length === typedChars.length) {
+      break;
+    }
   }
+
+  console.log({ typedChars });
   return typedChars;
 };
 
