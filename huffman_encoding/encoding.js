@@ -1,5 +1,3 @@
-import { dbg } from "./dbg.js";
-
 const calculateFrequencies = (word) => {
   const frequencies = {};
   for (const letter of word) {
@@ -8,19 +6,19 @@ const calculateFrequencies = (word) => {
   return frequencies;
 };
 
-class Node {
-  constructor(char, freq) {
-    this.char = char;
-    this.freq = freq;
-    this.right = null;
-    this.left = null;
-  }
-}
+const createNode = (char, freq) => ({
+  char,
+  freq,
+  right: null,
+  left: null,
+});
 
 const createNodes = (frequencies) => {
   const nodes = [];
   for (const frequency in frequencies) {
-    nodes.push(new Node(frequency, frequencies[frequency]));
+    const letter = frequency;
+    const occurence = frequencies[frequency];
+    nodes.push(createNode(letter, occurence));
   }
   return nodes;
 };
@@ -28,7 +26,7 @@ const createNodes = (frequencies) => {
 const sortNodes = (nodes) => nodes.sort((a, b) => a.freq - b.freq);
 
 const mergeNodes = (leftChild, rightChild) => {
-  const parentNode = new Node(null, leftChild.freq + rightChild.freq);
+  const parentNode = createNode(null, leftChild.freq + rightChild.freq);
   parentNode.left = leftChild;
   parentNode.right = rightChild;
   return parentNode;
@@ -36,11 +34,11 @@ const mergeNodes = (leftChild, rightChild) => {
 
 const buildHuffmanTree = (nodes) => {
   const [leftLeaf, rightLeaf, ...restOfNodes] = nodes;
-  let root = mergeNodes(leftLeaf,rightLeaf);
+  let root = mergeNodes(leftLeaf, rightLeaf);
 
   for (const node of restOfNodes) {
-    root = mergeNodes(node,root)
- }
+    root = mergeNodes(node, root);
+  }
   return root;
 };
 
@@ -62,7 +60,7 @@ const displayUTFRepresentation = (word) => {
   for (const letter of word) {
     UTFCodes.push(letter.charCodeAt().toString(2));
   }
-  console.log("UTF Representation :",UTFCodes.join(" "));
+  console.log("UTF Representation :", UTFCodes.join(" "));
 };
 
 const compress = (word, codes) => {
@@ -71,12 +69,12 @@ const compress = (word, codes) => {
     compressedBits.push(codes[letter]);
   }
   return compressedBits;
-}
+};
 
 const displayCompressedWord = (compressed, codes) => {
   console.table(codes);
-  
-  console.log("Compressed Bits: ",compressed.join(" "));
+
+  console.log("Compressed Bits: ", compressed.join(" "));
 };
 
 const main = () => {
@@ -88,7 +86,7 @@ const main = () => {
 
   const compressed = compress(wordToCompress, codes);
   displayUTFRepresentation(wordToCompress);
-  displayCompressedWord(compressed,codes);
+  displayCompressedWord(compressed, codes);
 };
 
 main();
