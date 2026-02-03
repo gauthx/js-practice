@@ -17,18 +17,41 @@ const parseRequest = async (conn) => {
   return { method, path, protocol, headers };
 };
 
-const handleConnection = async (conn) => {
+const formatResponseLine = ({ protocol, statusCode, statusDesc }) =>
+  `${protocol} ${statusCode} ${statusDesc}`;
+
+const formatResponseHeaders = (headers) =>
+  Object.entries(headers).map(([name, value]) => `${name}:${value}`)
+    .join("\r\n");
+
+const writeResponse = async (conn, response) => {
+  const finalResponse = [
+    formatResponseLine(response.responseLine),
+    formatResponseHeaders(response.headers),
+    "",
+    response.body,
+  ];
+
+  const encoder = new TextEncoder();
+  console.log(finalResponse.join("\r\n"));
+  await conn.write(encoder.encode(finalResponse.join("\r\n")));
+};
+
+const handleConnection = async (conn, handleRequest) => {
   try {
     while (true) {
       const request = await parseRequest(conn);
-      console.log(request);
+      console.log(request, "\n");
+      const response = await handleRequest(request);
+      console.log(response);
+      await writeResponse(conn, response);
     }
   } catch (err) {
     console.error(err.message);
   }
 };
 
-const startServer = async (port) => {
+const startServer = async (port, handleRequest) => {
   console.log("Server started on port", port);
   const listener = Deno.listen({
     hostname: "127.0.0.1",
@@ -36,10 +59,10 @@ const startServer = async (port) => {
     transport: "tcp",
   });
   for await (const conn of listener) {
-    handleConnection(conn);
+    handleConnection(conn, handleRequest);
   }
 };
 
-export const serve = async (port) => {
-  await startServer(port);
+export const serve = async (port, handleRequest) => {
+  await startServer(port, handleRequest);
 };
