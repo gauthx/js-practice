@@ -1,7 +1,7 @@
 const createLookup = (lookup, asciiStart, asciiEnd, mappedVal) => {
   for (let ascii = asciiStart; ascii <= asciiEnd; ascii++) {
     const char = String.fromCharCode(ascii);
-    lookup[char] = mappedVal++;
+    lookup[mappedVal++] = char;
   }
   return lookup;
 };
@@ -15,7 +15,10 @@ const main = () => {
   lookupTable[63] = "/";
   console.log(lookupTable);
 
-  Deno.writeTextFileSync("./data/lookup_table.json", JSON.stringify(lookupTable));
+  Deno.writeTextFileSync(
+    "./data/lookup_table.json",
+    JSON.stringify(lookupTable),
+  );
 };
 
 main();
