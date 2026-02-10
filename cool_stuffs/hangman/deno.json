@@ -1,0 +1,6 @@
+{
+  "tasks": {"play":"deno -A main.js"},
+  "imports": {
+    "@inquirer/prompts": "npm:@inquirer/prompts@^8.2.0"
+  }
+}
