@@ -1,4 +1,10 @@
-import { bold, brightYellow, gray, red } from "jsr:@std/fmt/colors";
+import {
+  bold,
+  brightYellow,
+  gray,
+  red,
+  stripAnsiCode,
+} from "jsr:@std/fmt/colors";
 import { calculateStatistics, displayStatistics } from "./statistics.js";
 
 const isBackspace = (arrayBuffer) => arrayBuffer.at(0) === 127;
@@ -15,47 +21,49 @@ const randomSentence = async () => {
   return randomWords.join(" ").split("");
 };
 
-const typingPreview = (chars, typedChars) => {
-  return typedChars.join("") +
-    boldGray(chars.slice(typedChars.length).join(""));
-};
+const typingPreview = (chars, typedChars) =>
+  typedChars.join("") +
+  boldGray(chars.slice(typedChars.length).join(""));
 
 const boldGray = (text) => bold(gray(text));
 
-const readTyped = async (chars) => {
-  console.log(boldGray(chars.join("")));
+const isTypingDone = (chars, typedChars) => chars.length === typedChars.length;
+
+const startTyping = async (charsToType) => {
+  console.log(boldGray(charsToType.join("")));
 
   const coloredChars = [];
-  const typedChars = [];
   const decoder = new TextDecoder();
   for await (const keyStroke of Deno.stdin.readable) {
     console.clear();
 
     if (isBackspace(keyStroke)) {
       coloredChars.pop();
-      typedChars.pop();
     } else {
       const typedChar = decoder.decode(keyStroke);
-      typedChars.push(typedChar);
-      const colorer = chooseColor(typedChar, coloredChars, chars);
+      const colorer = chooseColor(typedChar, coloredChars, charsToType);
       coloredChars.push(bold(colorer(typedChar)));
     }
-    console.log(typingPreview(chars, coloredChars));
+    console.log(typingPreview(charsToType, coloredChars));
 
-    if (chars.length === typedChars.length) {
+    if (isTypingDone(charsToType, coloredChars)) {
       break;
     }
   }
 
-  return typedChars;
+  return coloredChars;
 };
+
+const removeColors = (coloredChars) =>
+  coloredChars.map((char) => stripAnsiCode(char));
 
 export const typer = async () => {
   const charsToType = await randomSentence();
   const startTime = Date.now();
-  const typedChars = await readTyped(charsToType);
+  const coloredChars = await startTyping(charsToType);
   const endTime = Date.now();
-  const timeStamps = { startTime, endTime };
-  const statistics = calculateStatistics(charsToType, typedChars, timeStamps);
+  const timestamps = { startTime, endTime };
+  const typedChars = removeColors(coloredChars);
+  const statistics = calculateStatistics(charsToType, typedChars, timestamps);
   displayStatistics(statistics);
 };
