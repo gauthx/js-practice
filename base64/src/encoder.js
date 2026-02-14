@@ -1,7 +1,5 @@
 import { chunk } from "jsr:@std/collections/chunk";
-
-const loadLookUpTable = () =>
-  JSON.parse(Deno.readTextFileSync("./data/lookup_table.json"));
+import { loadLookUpTable } from "../utils/create_lookup_table.js";
 
 export const toBytes = (string) => {
   const bytes = [];

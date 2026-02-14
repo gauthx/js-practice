@@ -13,6 +13,7 @@ const main = () => {
   createLookup(lookupTable, 48, 57, 52); // 0-9 mapping
   lookupTable[62] = "+";
   lookupTable[63] = "/";
+
   console.log(lookupTable);
 
   Deno.writeTextFileSync(
@@ -21,4 +22,7 @@ const main = () => {
   );
 };
 
-main();
+export const loadLookUpTable = () =>
+  JSON.parse(Deno.readTextFileSync("./data/lookup_table.json"));
+
+// main();

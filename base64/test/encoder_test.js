@@ -3,7 +3,7 @@ import { describe, it } from "jsr:@std/testing/bdd";
 import { encode, toBytes } from "../src/encoder.js";
 
 describe("testing to ASCII bytes convertor", () => {
-  it("converting 'Man' to ASCII bytes", () => {
+  it("converting 'Man' to bytes", () => {
     assertEquals(toBytes("Man"), ["01001101", "01100001", "01101110"]);
   });
 });
