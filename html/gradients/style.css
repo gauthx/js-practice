@@ -1,0 +1,96 @@
+:root {
+  @import url('https://fonts.googleapis.com/css2?family=Love+Light&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+  --lux-gradient: linear-gradient(to bottom right, white, rgb(240, 132, 152), #0d080900);
+  --sun-gradient: radial-gradient(circle closest-side, rgb(255, 251, 182) 10%, gold 40%, orange 60%, orange 80%, black);
+  --moon-gradient: radial-gradient(circle closest-side, white 20%, gray, white 0%, black);
+  --pattern-gradient: radial-gradient(circle at bottom left, black 20%, gold 20%, gold 30%, rgba(0, 0, 0, 0.118) 30%),
+    radial-gradient(circle at top right, black 20%, gold 20%, gold 30%, rgba(0, 0, 0, 0.847) 30%),
+    radial-gradient(circle at top left, black 20%, gold 20%, gold 30%, rgba(0, 0, 0, 0.363) 30%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+#indexes {
+  border-right: 2px solid black;
+  width: 15%;
+  padding-right: .8em;
+  background-color: rgb(231, 193, 193)
+}
+
+.index {
+  border: 2px solid black;
+  height: 6%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-left: 7px;
+}
+
+.index a {
+  text-decoration: none;
+  font-size: 1.3em;
+}
+
+#lux-index:hover {
+  background: var(--lux-gradient);
+}
+
+#sun-index:hover {
+  background: var(--sun-gradient);
+}
+
+#moon-index:hover {
+  background: var(--moon-gradient);
+}
+
+#pattern-index:hover {
+  background: var(--pattern-gradient);
+
+}
+#gradient-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: red;
+
+}
+
+#lux {
+  width: 100%;
+  height: 100%;
+  background-image: var(--lux-gradient);
+  font-family: "love light";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10em;
+  font-weight: 500;
+}
+
+#sun {
+  width: 100%;
+  height: 100%;
+  background-image: var(--sun-gradient)
+}
+
+#moon {
+  width: 100%;
+  height: 100%;
+  background-image: var(--moon-gradient)
+}
+
+#pattern {
+  height: 100%;
+  width: 100%;
+  background: var(--pattern-gradient);
+  background-size: 100px 100px;
+}
