@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .cards-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      width: 350px;
+      height: 505px;
+      border: 1px solid black;
+    }
+
+    .image-container {
+      border: 2px solid salmon;
+      margin: 4px 4px;
+      height: 250px;
+    }
+
+    .image-container img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+
+    .stats-container {
+      border: 2px solid black;
+      margin: 3px 3px;
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      border: 2px solid bisque;
+      padding: 0.6em 1em;
+    
+    }
+
+    .stat p {
+      font-size: 1.5em;
+    }
+
+    .stat:hover {
+      background-color: rgb(230, 226, 226);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cards-container">
+    <div class="card">
+      <div class="image-container">
+        <img
+          src="https://imgs.search.brave.com/6bqpqy1S2n8EPLe-J6xGt2uHx2PAzTHNT_0uyH9h5us/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMjE2/ODI1NDk1My9waG90/by9kb3J0bXVuZC1n/ZXJtYW55LW5pY28t/c2NobG90dGVyYmVj/ay1vZi1ib3J1c3Np/YS1kb3J0bXVuZC1w/b3Nlcy1mb3ItYS1w/b3J0cmFpdC1kdXJp/bmctdGhlLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz1tS09Z/cG9hTHB4SmcxcW1w/bUNjcnY0YXhtSVo1/UVlaMC1OcEc2Vmw2/aEgwPQ"
+          alt="">
+      </div>
+
+      <div class="stats-container">
+
+        <div class="stat">
+          <p>Stat name</p>
+          <p>90</p>
+        </div>
+
+        <div class="stat">
+          <p>Stat name</p>
+          <p>90</p>
+        </div>
+
+        <div class="stat">
+          <p>Stat name</p>
+          <p>90</p>
+        </div>
+
+        <div class="stat">
+          <p>Stat name</p>
+          <p>90</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    body {
+      font-family: "Orbitron";
+    }
+
+    #container {
+      height: 100vh;
+      width: 100vw;
+      border: 2px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #card {
+      position: relative;
+      height: 450px;
+      width: 700px;
+      background-color: black;
+      border-radius: 17px;
+      box-shadow: 7px 7px 10px gray;
+    }
+
+    #bank-name {
+      position: absolute;
+      left: 3%;
+      top: 10%;
+      color: white;
+      display: inline-block;
+
+      letter-spacing: .07em;
+      font-size: 2em;
+    }
+
+    #logo {
+      position: absolute;
+      left: 75%;
+      top: 2%;
+      height: 10em;
+      width: 10em;
+    }
+
+    #logo img {
+      width: 100%;
+    }
+
+    #chip-container {
+      top: 15%;
+      left: 4%;
+      height: 10em;
+      position: absolute;
+    }
+
+    #chip-container img {
+      height: 100%;
+    }
+
+    #nfc-container {
+      position: absolute;
+      top: 25%;
+      left: 25%;
+      height: 4em;
+      width: 6em;
+      display: flex;
+    }
+
+    .arc {
+      border: 0.2em solid white;
+      height: 3.5em;
+      width: 1em;
+      border-radius: 90%;
+      border-top: none;
+      border-bottom: none;
+      border-left: none;
+      margin: 0.2em -4%;
+    }
+
+    #arc-2 {
+      height: 3em;
+      width: 1em;
+      margin-top: 0.5em;
+    }
+
+    #arc-3 {
+      height: 2.5em;
+      width: 1em;
+      margin-top: 0.8em;
+    }
+
+    #arc-4 {
+      height: 1.8em;
+      width: 1em;
+      margin-top: 1.18em;
+    }
+
+    #card-number{
+      position: absolute;
+      top: 60%;
+      left: 13%;
+      font-size: 1.8em;
+      letter-spacing: .15em;
+      color: aliceblue;
+    }
+
+    #master-card-logo {
+      font-family: sans-serif;
+      position: absolute;
+      top: 80%;
+      left: 80%;
+      display: flex;
+      width: 18%;
+    }
+
+    .master-card-circle {
+      height: 70px;
+      width: 70px;
+      border-radius: 50%;
+    }
+
+    #red-circle {
+      background-color: red;
+      z-index: 2;
+    }
+
+    .yellow-circle {
+      position: absolute;
+      background-color: rgba(255, 255, 0, 0.287);
+      right: 2px;
+      z-index: 2;
+    }
+
+    #bright-circle {
+      position: absolute;
+      background-color: rgb(233, 156, 13);
+      right: 2px;
+      z-index: 1;
+    }
+
+    #master-card-text {
+      position: absolute;
+      top: 30%;
+      left: 6%;
+      color: white;
+      font-size: 1.3em;
+      font-weight: 500;
+      z-index: 3;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="card">
+
+      <div id="bank-name">
+        <p>Broken Bank Ltd.</p>
+      </div>
+      <div id="logo"><img src="data/logo.png" alt=""></div>
+
+      <div id="chip-container"><img src="data/atm-chip.png" alt=""></div>
+
+      <div id="nfc-container">
+        <div class="arc" id="arc-4"></div>
+        <div class="arc" id="arc-3"></div>
+        <div class="arc" id="arc-2"></div>
+        <div class="arc" id="arc-1"></div>
+      </div>
+
+        <div id="card-number">
+          <p>1234 5678  1234  1234</p>
+        </div>
+      <div id="master-card-logo">
+
+        <div id="red-circle" class="master-card-circle"></div>
+        <div id="master-card-text">MasterCard</div>
+        <div class="master-card-circle yellow-circle"></div>
+        <div id="bright-circle" class="master-card-circle yellow-circle"></div>
+
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>
