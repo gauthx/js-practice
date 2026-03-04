@@ -6,7 +6,8 @@ export const createApp = () => {
   const app = new Hono();
 
   app.use(logger());
-  app.get("*", serveStatic({ root: "public" }));
+  app.get("*.json", serveStatic({ root: "public/data" }));
+  app.get("*", serveStatic({ root: "public"}));
 
   return app;
 };

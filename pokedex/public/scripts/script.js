@@ -35,8 +35,8 @@ const createCard = (pokemon) => {
   const stats = Object.entries(pokemon.stats).map(([stat, value]) => [
     "div",
     { class: "stat" },
-    ["p", { class: "stat-name" }, stat],
-    ["p", { class: "stat-name" }, String(value)],
+    ["p", { class: "stat-name" }, capitalizeFirstLetter(stat)],
+    ["p", {}, String(value)],
   ]);
 
   const statsContainer = ["div", { class: "stats-container" }, ...stats];
@@ -47,7 +47,7 @@ const createCard = (pokemon) => {
     [
       "div",
       { class: "name-types-container" },
-      ["h2", { }, capitalizeFirstLetter(pokemon.name)],
+      ["h2", {}, capitalizeFirstLetter(pokemon.name)],
       typesContainer,
     ],
 
@@ -62,39 +62,16 @@ const createCard = (pokemon) => {
 
 const createCards = (pokemons) => pokemons.map(createCard);
 
-window.onload = () => {
-  const pokemons = [
-    {
-      imageUrl:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      name: "bulbasaur",
-      types: ["grass", "poison"],
-      stats: {
-        weight: 69,
-        baseXP: 64,
-        hp: 45,
-        attack: 49,
-        defense: 49,
-        speed: 45,
-      },
-    },
-    // {
-    //   imageUrl:
-    //     "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png",
-    //   name: "ivysaur",
-    //   types: ["grass", "poison"],
-    //   stats: {
-    //     weight: 130,
-    //     baseXP: 142,
-    //     hp: 60,
-    //     attack: 62,
-    //     defense: 63,
-    //     speed: 60,
-    //   },
-    // },
-  ];
-
+const displayPokemon = (pokedex) => {
   const cardsContainer = document.querySelector("#cards-container");
-  const cards = createCards(pokemons);
+  const cards = createCards(pokedex);
+  console.log("Cards created: ", cards);
   cardsContainer.append(...cards);
+};
+
+window.onload = async () => {
+  const response = await fetch("all.json");
+  const pokedex = await response.json()
+  console.log(pokedex)
+  displayPokemon(pokedex);
 };
