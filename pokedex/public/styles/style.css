@@ -1,0 +1,140 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+:root {
+  --text-color: rgb(110, 110, 110);
+}
+
+#main-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+#side-bar {
+  background-color: rgb(244, 244, 244);
+  width: 20%;
+  height: 100vh;
+}
+
+#navs-container {
+  margin-top: 1.5em;
+}
+
+.nav {
+  font-size: 1.6em;
+}
+
+.nav a {
+  text-decoration: none;
+  display: block;
+  padding: .2em 1em;
+  color: gray;
+}
+
+
+#all-type {
+  background-color: rgb(105, 105, 105);
+}
+
+#selected-type {
+  color: white;
+}
+
+#cards-container {
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+  margin-left: 2em;
+  width: 75%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3.5em;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.card {
+  height: 25em;
+  width: 17em;
+  border: 1px solid rgb(184, 184, 184);
+  border-radius: .3em;
+  padding: .5em .5em;
+  background-color: rgb(244, 244, 244);
+}
+
+.card:hover {
+  box-shadow: 5px 5px 10px grey;
+}
+
+.image-container {
+  padding: .5em .5em;
+  height: 50%;
+  width: 100%;
+  background-color: rgb(230, 230, 230);
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card-details {
+  height: 50%;
+  width: 100%;
+}
+
+.name-types-container {
+  margin-top: .5em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  font-size: .8em;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.types-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: white;
+  gap: .4em;
+}
+
+.type {
+  height: 1em;
+  border-radius: .2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .8em;
+  padding: .7em .3em;
+}
+
+.stats-container {
+  margin-top: .55em;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--text-color);
+  padding: .15em;
+}
+
+.stat-name {
+  font-weight: 600;
+}
+
+.stats-container :last-child {
+  border: none;
+}
