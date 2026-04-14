@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow DOM</title>
+  <script>
+    window.onload = () => {
+      const hostEle = document.querySelector('#host')
+      const shadowRoot = hostEle.attachShadow({ mode: "open" })
+
+      const para = document.createElement('p')
+      para.innerText = "Hey broski, I'm in Shadow DOM"
+      shadowRoot.append(para)
+    }
+  </script>
+</head>
+
+<body>
+  <span id="host">
+  </span>
+  <span>Im in DOM</span>
+</body>
+
+</html>
