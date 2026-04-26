@@ -22,7 +22,6 @@ const groupByType = (pokedex) => {
   };
 
   for (const pokemon of pokedex) {
-    console.log({ pokemon });
     for (const type of pokemon.types) {
       cards[type].push(pokemon);
     }
@@ -46,4 +45,5 @@ const main = async () => {
   const groupedPokemon = groupByType(JSON.parse(pokedex));
   writeToFiles(groupedPokemon);
 };
+
 main();

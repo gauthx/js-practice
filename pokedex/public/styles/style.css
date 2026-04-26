@@ -30,6 +30,7 @@
 }
 
 .nav a {
+  cursor: pointer;
   text-decoration: none;
   display: block;
   padding: .2em 1em;
@@ -133,6 +134,10 @@
 
 .stat-name {
   font-weight: 600;
+}
+
+.stat-value {
+  font-weight: 500;
 }
 
 .stats-container :last-child {

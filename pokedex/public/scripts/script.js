@@ -36,7 +36,7 @@ const createCard = (pokemon) => {
     "div",
     { class: "stat" },
     ["p", { class: "stat-name" }, capitalizeFirstLetter(stat)],
-    ["p", {}, String(value)],
+    ["p", { class: "stat-value" }, String(value)],
   ]);
 
   const statsContainer = ["div", { class: "stats-container" }, ...stats];
@@ -54,10 +54,9 @@ const createCard = (pokemon) => {
     statsContainer,
   ];
 
-  console.log("Stats Cotainer: ", JSON.stringify(statsContainer));
-  const card = ["div", { class: "card" }, imageContainer, cardDetails];
+  const cardStructure = ["div", { class: "card" }, imageContainer, cardDetails];
 
-  return createFragment(card);
+  return createFragment(cardStructure);
 };
 
 const createCards = (pokemons) => pokemons.map(createCard);
@@ -65,13 +64,26 @@ const createCards = (pokemons) => pokemons.map(createCard);
 const displayPokemon = (pokedex) => {
   const cardsContainer = document.querySelector("#cards-container");
   const cards = createCards(pokedex);
-  console.log("Cards created: ", cards);
   cardsContainer.append(...cards);
+};
+
+const registerListeners = () => {
+  const navigations = document.querySelector("#navs-container");
+  navigations.addEventListener("click", async (event) => {
+    const type = event.target.getAttribute("id");
+    const response = await fetch(`${type}.json`);
+    const pokedex = await response.json();
+
+    const cardsContainer = document.querySelector("#cards-container");
+    const cards = createCards(pokedex);
+    cardsContainer.innerHTML = "";
+    cardsContainer.append(...cards);
+  });
 };
 
 window.onload = async () => {
   const response = await fetch("all.json");
-  const pokedex = await response.json()
-  console.log(pokedex)
+  const pokedex = await response.json();
   displayPokemon(pokedex);
+  registerListeners();
 };

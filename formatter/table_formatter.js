@@ -1,7 +1,7 @@
 const formatTag = (tag, data) => `<${tag}>${data}</${tag}>`;
 
 const formatRow = (row, tag) => {
-  const cells = row.match(/\b\w+\b/g);
+  const cells = row.match(/[^\s]+(?:\s[^\s]+)*/g);
   return cells.map((cell) => formatTag(tag, cell)).join("");
 };
 

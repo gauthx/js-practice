@@ -1,9 +1,26 @@
-const addNode = (adjacenyList, word) => {
-  adjacenyList.set(word, []);
+const addNode = (adjacenyList, station) => {
+  adjacenyList.set(station, []);
 };
 
 const addEdge = (adjacenyList, word1, word2) => {
   adjacenyList.get(word1).push(word2);
+};
+
+const dfs = (adjacenyList, start, visited = new Set()) => {
+  console.log(start);
+  visited.add(start);
+
+  const destinations = adjacenyList.get(start);
+
+  for (const destination of destinations) {
+    if (destination === target) {
+      console.log(`Found ${target}`)
+    }
+    if (!visited.has(destination)) {
+      visited.add(destination);
+      dfs(adjacenyList, destination, visited);
+    }
+  }
 };
 
 const bfs = (adjacenyList, start) => {
@@ -20,7 +37,7 @@ const bfs = (adjacenyList, start) => {
 
       if (!visited.has(destination)) {
         visited.add(destination);
-        queue.push(destination)
+        queue.push(destination);
       }
     }
   }
@@ -49,12 +66,13 @@ const main = () => {
   ];
 
   const adjacenyList = new Map();
-  stations.forEach((word) => addNode(adjacenyList, word));
+  stations.forEach((station) => addNode(adjacenyList, station));
   routes.forEach((connectedStation) =>
     addEdge(adjacenyList, ...connectedStation),
   );
   console.log(adjacenyList);
   bfs(adjacenyList, "Chicago");
+  dfs(adjacenyList,"Chicago")
 };
 
 main();

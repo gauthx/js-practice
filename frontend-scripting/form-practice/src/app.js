@@ -10,7 +10,7 @@ export const createApp = () => {
   app.post("/register", async (context) => {
     const { playerName, club, nation } = await context.req.json();
     playerStore.register(playerName, club, nation);
-    return context.te
+    return context.text("OK")
   });
 
   app.get("/all-players", (context) => context.json(playerStore.getAll()));
